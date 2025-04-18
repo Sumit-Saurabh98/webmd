@@ -1,0 +1,3361 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebMD - Better Information. Better Health.</title>
+    <style>
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Source Sans Pro", Arial, sans-serif;
+        font-style: normal;
+      }
+
+      body {
+        background-color: white;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      /* Header Styles */
+      .navbar {
+        position: relative;
+        background-color: #00247d;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 2%;
+        height: 75px;
+        z-index: 10;
+        font-size: small;
+      }
+
+      .navbar .logo img {
+        height: 26px;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        margin-left: 30px;
+        flex-grow: 1;
+        list-style: none;
+        justify-content: center; /* Center the nav items */
+      }
+
+      .nav-links li {
+        position: relative;
+        margin-right: 20px;
+      }
+
+      .nav-links a,
+      .nav-links button {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 16px;
+      }
+
+      /* the little chevron */
+      .nav-links .arrow-icon {
+        margin-left: 2px;
+        width: 12px;
+        height: 12px;
+        transition: transform 0.3s ease;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* rotate it when hovering that <li> */
+      .nav-links li:hover > a .arrow-icon {
+        transform: rotate(180deg);
+      }
+
+      /* ─── DROPDOWN ──────────────────────────────────────────────────────────── */
+      .nav-dropdown-container {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        min-width: 180px; /* Minimum width for dropdown */
+        width: auto; /* Allow it to expand based on content */
+        background: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        overflow: visible;
+      }
+
+      .nav-links li:hover > .nav-dropdown-container {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .dropdown-inner {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+        white-space: nowrap;
+      }
+
+      /* Special handling for multi-column dropdowns */
+      #conditions-dropdown .dropdown-inner {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        min-width: 800px;
+        padding: 0;
+        white-space: normal;
+      }
+
+      #drugs-dropdown .dropdown-inner {
+        display: flex;
+        flex-direction: column;
+        min-width: 200px;
+        padding: 0;
+        white-space: normal;
+      }
+
+      #wellbeing-dropdown .dropdown-inner {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        min-width: 500px;
+        padding: 0;
+        white-space: normal;
+      }
+
+      #more-dropdown .dropdown-inner {
+        display: flex;
+        flex-direction: column;
+        min-width: 200px;
+        padding: 0;
+        white-space: normal;
+      }
+
+      .dropdown-inner a {
+        padding: 15px;
+        color: #333;
+        text-decoration: none;
+        border-bottom: 1px solid #eee; /* Individual border for each dropdown item */
+        transition: color 0.2s;
+        font-size: 16px;
+      }
+
+      .dropdown-inner a:hover {
+        color: #0073cf;
+      }
+
+      /* View All link styling */
+      .view-all {
+        color: #0066cc !important;
+        display: flex;
+        align-items: center;
+      }
+
+      .arrow-right {
+        margin-right: 5px;
+      }
+
+      /* Separator styling */
+      .separator {
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0 10px;
+        font-size: 20px;
+      }
+
+      /* Subscribe button styling */
+      .subscribe-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border-radius: 10px;
+        padding: 8px 20px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .subscribe-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .envelope-icon {
+        margin-right: 8px;
+        width: 18px;
+        height: 18px;
+      }
+
+      /* Search styles */
+      .search-icon {
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      #search-container {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30%;
+        height: 70px;
+        background: #00247d;
+        align-items: center;
+        padding: 0 20px;
+        z-index: 20;
+      }
+
+      #search-container.active {
+        display: flex;
+      }
+
+      .search-bar {
+        flex-grow: 1;
+        display: flex;
+        background: white;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .search-bar input {
+        flex-grow: 1;
+        padding: 10px 15px;
+        font-size: 16px;
+        border: none;
+        outline: none;
+      }
+
+      .search-bar button {
+        padding: 10px 20px;
+        border: none;
+        background: #3b6df2;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close-search {
+        color: white;
+        font-size: 24px;
+        margin-left: 15px;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+
+      /* Main Content Styles */
+      main {
+        margin: 0 auto;
+        padding: 0px 0px;
+      }
+
+      /* Top Stories Section */
+      .top-top-stories {
+        margin: 40px auto;
+        max-width: 1200px;
+      }
+
+      .top-section-header {
+        padding-bottom: 8px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .top-section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #00157c;
+        text-transform: uppercase;
+      }
+
+      /* Featured Story */
+      .top-featured-story {
+        display: flex;
+        background-color: white;
+        border-radius: 0;
+        overflow: hidden;
+        margin-bottom: 40px;
+        box-shadow: none; /* Removed the background shadow as requested */
+      }
+
+      .top-featured-image {
+        width: 42%;
+        border-radius: 5px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .top-featured-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .top-featured-story:hover .top-featured-image img {
+        transform: scale(1.1);
+      }
+
+      .top-featured-content {
+        width: 58%;
+        padding: 0 0 0 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .top-featured-title {
+        font-size: 24px;
+        color: #1b1b1b;
+        margin-bottom: 15px;
+      }
+
+      .top-featured-story:hover .top-featured-title {
+        color: #3557ff;
+      }
+
+      .top-featured-description {
+        color: #4a4a4a;
+        font-size: 18px;
+        line-height: 1.5;
+      }
+
+      /* Story Cards Section */
+      .top-story-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 40px;
+        border-top: 1px solid #ddd;
+        padding-top: 40px;
+      }
+
+      .top-story-card {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: none;
+        box-shadow: none;
+      }
+
+      .top-story-card-image {
+        width: 42%;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      .top-story-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease; /* Added smooth transition effect */
+      }
+
+      .top-story-card:hover .top-story-card-image img {
+        transform: scale(1.1);
+      }
+
+      .top-story-card:hover .top-story-card-title {
+        color: #3557ff;
+      }
+
+      .top-story-card-content {
+        width: 58%;
+        padding: 0 0 0 16px;
+      }
+
+      .top-story-card-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.3;
+      }
+
+      /* Common Section Header Styling */
+      .living-healthy-section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .living-healthy-section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #00157c;
+      }
+
+      .living-healthy-view-all {
+        color: #3557ff;
+        font-weight: 600;
+        text-decoration: none;
+        padding-bottom: 2px;
+        border-bottom: 2px solid #3557ff;
+      }
+
+      /* Living Healthy Section */
+      .living-healthy-living-healthy {
+        margin: 40px auto;
+        max-width: 1200px;
+      }
+
+      .living-healthy-health-categories {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+      }
+
+      .living-healthy-health-category {
+        position: relative;
+        height: 320px;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      .living-healthy-health-category img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .living-healthy-health-category:hover img {
+        transform: scale(1.1);
+      }
+
+      .living-healthy-category-title {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 60px 16px 20px;
+        font-size: 20px;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        text-align: left;
+      }
+
+      /* Conditions Section */
+      .living-healthy-conditions {
+        margin: 40px auto;
+        max-width: 1200px;
+      }
+
+      .living-healthy-condition-links {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        background-color: #f0f4ff;
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .living-healthy-condition-link {
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #1b1b1b;
+        font-weight: lighter;
+        text-decoration: none;
+        border-bottom: 1px solid #e0e4f0;
+      }
+
+      /* Remove border from the last row of condition links */
+      .living-healthy-condition-link:nth-child(5),
+      .living-healthy-condition-link:nth-child(6),
+      .living-healthy-condition-link:nth-child(7),
+      .living-healthy-condition-link:nth-child(8) {
+        border-bottom: none;
+      }
+
+      .living-healthy-condition-link svg {
+        color: #3557ff;
+      }
+
+      /* Cancer link special color */
+      .living-healthy-condition-link:hover {
+        color: #3557ff;
+      }
+
+      /* Health News Section */
+      .health-news-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .health-news-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e5e5e5;
+      }
+
+      .health-news-title {
+        color: #0039a6;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .health-news-view-all {
+        color: #3557ff;
+        font-weight: 600;
+        text-decoration: none;
+        padding-bottom: 2px;
+        border-bottom: 2px solid #3557ff;
+      }
+
+      .health-news-view-all::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #4365af;
+      }
+
+      .health-news-featured {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 40px;
+        background-color: #fff;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .health-news-featured-image-container {
+        width: 40%;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .health-news-featured-image {
+        width: 100%;
+        border-radius: 5px;
+        height: 320px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .health-news-featured:hover .health-news-featured-image {
+        transform: scale(1.1);
+      }
+
+      .health-news-featured:hover .health-news-featured-title {
+        color: #3557ff;
+      }
+
+      .health-news-featured-content {
+        width: 60%;
+        padding: 20px 30px;
+      }
+
+      .health-news-featured-title {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #222;
+        line-height: 1.2;
+      }
+
+      .health-news-featured-description {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.6;
+      }
+
+      .health-news-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .health-news-card {
+        background-color: #fff;
+        border-right: 1px solid #e5e5e5;
+        padding: 0 15px;
+        position: relative;
+        height: 100%;
+        cursor: pointer;
+        overflow: hidden;
+      }
+
+      .health-news-card:last-child {
+        border-right: none;
+      }
+
+      .health-news-card-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #222;
+        transition: transform 0.3s ease;
+      }
+
+      .health-news-card:hover .health-news-card-title {
+        transform: scale(1.03);
+        color: #3557ff;
+      }
+
+      @media (max-width: 768px) {
+        .health-news-featured {
+          flex-direction: column;
+        }
+
+        .health-news-featured-image-container,
+        .health-news-featured-content {
+          width: 100%;
+        }
+
+        .health-news-cards {
+          grid-template-columns: 1fr;
+        }
+
+        .health-news-card {
+          border-right: none;
+          border-bottom: 1px solid #e5e5e5;
+          padding: 15px 0;
+        }
+
+        .health-news-card:last-child {
+          border-bottom: none;
+        }
+      }
+
+      /* Expert Section */
+      .expert-opinion-expert-section {
+        background-color: #050d2a;
+        color: white;
+        width: 100%;
+        margin: 40px auto;
+        padding: 30px 40px;
+        position: relative;
+      }
+
+      .expert-opinion-expert-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .expert-opinion-horizontal-line {
+        height: 1px;
+        background-color: rgba(255, 255, 255, 0.2);
+        margin: 0 0 40px;
+        width: 100%;
+      }
+
+      .expert-opinion-expert-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+
+      .expert-opinion-expert-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .expert-opinion-expert-info h3 {
+        font-size: 18px;
+        margin-bottom: 1.5px;
+        font-weight: normal;
+      }
+
+      .expert-opinion-expert-info h2 {
+        font-size: 22px;
+      }
+
+      .expert-opinion-expert-info p {
+        font-size: 18px;
+        opacity: 0.8;
+        margin-top: -3px;
+      }
+
+      .expert-opinion-content-container {
+        display: flex;
+        position: relative;
+      }
+
+      .expert-opinion-main-video-container {
+        width: 60%;
+        position: relative;
+      }
+
+      .expert-opinion-main-video {
+        position: relative;
+        height: 400px;
+        overflow: hidden;
+        margin-right: 20px;
+        cursor: pointer;
+      }
+
+      .expert-opinion-main-video img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+
+      /* New Watch Button Styles */
+      .expert-opinion-watch-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: #4b6df5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+
+      .expert-opinion-main-video .expert-opinion-watch-btn {
+        width: 48px;
+        height: 48px;
+        transform: translateX(100%);
+      }
+
+      .expert-opinion-main-video:hover .expert-opinion-watch-btn {
+        transform: translateX(0);
+        width: 120px;
+      }
+
+      .expert-opinion-watch-text {
+        margin-left: 8px;
+        font-weight: 500;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        white-space: nowrap;
+      }
+
+      .expert-opinion-main-video:hover .expert-opinion-watch-text {
+        opacity: 1;
+      }
+
+      .expert-opinion-main-video-title {
+        font-size: 40px;
+        font-weight: 600;
+        line-height: 1.2;
+        margin-top: 20px;
+      }
+
+      .expert-opinion-main-video-title:hover {
+        color: #ced4f5;
+      }
+
+      .expert-opinion-vertical-divider {
+        width: 1px;
+        background-color: rgba(255, 255, 255, 0.2);
+        height: 100%;
+        position: absolute;
+        left: 60%;
+      }
+
+      .expert-opinion-video-list-container {
+        width: 40%;
+        padding-left: 20px;
+      }
+
+      .expert-opinion-video-list {
+        display: flex;
+        gap: 50px;
+        flex-direction: column;
+      }
+
+      .expert-opinion-video-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        cursor: pointer;
+      }
+
+      .expert-opinion-video-item-thumbnail {
+        position: relative;
+        border-radius: 10px;
+        width: 150px;
+        height: 90px;
+        flex-shrink: 0;
+        overflow: hidden;
+      }
+
+      .expert-opinion-video-item-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .expert-opinion-video-item-play {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: #4b6df5;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateX(100%);
+        transition: all 0.3s ease;
+      }
+
+      .expert-opinion-video-item-thumbnail:hover
+        .expert-opinion-video-item-play {
+        transform: translateX(0);
+        width: 80px;
+      }
+
+      .expert-opinion-video-item-play .expert-opinion-watch-text {
+        font-size: 12px;
+      }
+
+      .expert-opinion-video-item-thumbnail:hover .expert-opinion-watch-text {
+        opacity: 1;
+      }
+
+      .expert-opinion-video-item:hover .expert-opinion-video-item-title {
+        color: #ced4f5;
+      }
+
+      .expert-opinion-video-item-content {
+        flex: 1;
+      }
+
+      .expert-opinion-video-item-title {
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 1.3;
+      }
+
+      /* Play button SVG style */
+      .expert-opinion-play-svg {
+        width: 16px;
+        height: 16px;
+        fill: white;
+        flex-shrink: 0;
+        background-color: #4b6df5;
+      }
+
+      /* Featured Stories Section */
+      .special-section {
+        margin: 40px auto;
+        max-width: 1200px;
+      }
+
+      .special-section-special-section-header {
+        color: #000;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        text-transform: uppercase;
+      }
+
+      .special-section-stories-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .special-section-story-card {
+        background-color: #fff;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .special-section-story-image-container {
+        width: 100%;
+        height: 267px;
+        overflow: hidden;
+      }
+
+      .special-section-story-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .special-section-story-card:hover .special-section-story-image {
+        transform: scale(1.1);
+      }
+
+      .special-section-story-content {
+        padding: 15px;
+      }
+
+      .special-section-story-title {
+        color: #1b1b1b;
+        font-size: 24px;
+        margin-bottom: 10px;
+        transition: color 0.3s ease;
+      }
+
+      .special-section-story-card:hover .special-section-story-title {
+        color: #3557ff;
+      }
+
+      .special-section-story-description {
+        color: #4a4a4a;
+        font-size: 18px;
+      }
+
+      .special-section-category {
+        color: #00157c;
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+
+      /* Trending Topics Section */
+      .trending-topics {
+        margin: 40px auto;
+        max-width: 1200px;
+      }
+
+      .trending-topics-header {
+        color: #000;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        text-transform: uppercase;
+      }
+
+      .trending-topics-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .trending-topics-item {
+        background-color: #f8f9fa;
+        border-radius: 30px;
+        padding: 12px 25px;
+        font-size: 16px;
+        color: #4169e1;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .trending-topics-item:hover {
+        background-color: #e8eeff;
+      }
+
+      /* Newsletter Section */
+      .newsletter-section {
+        background-color: #0e3174;
+        color: white;
+        padding: 30px;
+        margin: 40px 0;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .newsletter-content {
+        flex: 1;
+      }
+
+      .newsletter-title {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .newsletter-subtitle {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .newsletter-options {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .newsletter-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .newsletter-option input {
+        width: 20px;
+        height: 20px;
+      }
+
+      .newsletter-form {
+        display: flex;
+        max-width: 500px;
+      }
+
+      .newsletter-input {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 4px 0 0 4px;
+        font-size: 16px;
+      }
+
+      .newsletter-button {
+        background-color: #c5c5c5;
+        color: #333;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 0 4px 4px 0;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .newsletter-terms {
+        font-size: 12px;
+        margin-top: 15px;
+      }
+
+      .newsletter-terms a {
+        color: white;
+        text-decoration: underline;
+      }
+
+      .newsletter-image {
+        flex: 0 0 300px;
+      }
+
+      .newsletter-all-button {
+        display: inline-block;
+        border: 1px solid white;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        font-weight: bold;
+        margin-top: 15px;
+      }
+
+      /* Special Section */
+      .special-section-container {
+        margin: 40px auto;
+        max-width: 1200px;
+      }
+
+      .special-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .special-card {
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .special-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .special-content {
+        padding: 15px;
+      }
+
+      .special-category {
+        color: #0e3174;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .special-title {
+        color: #333;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .special-description {
+        color: #555;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      /* Trending Topics Section */
+      .trending-topics {
+        margin: 40px auto;
+        max-width: 1200px;
+      }
+
+      .trending-topics-header {
+        color: #000;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        text-transform: uppercase;
+      }
+
+      .trending-topics-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .trending-topics-item {
+        background-color: #f8f9fa;
+        border-radius: 30px;
+        padding: 12px 25px;
+        font-size: 16px;
+        color: #4169e1;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .trending-topics-item:hover {
+        background-color: #e8eeff;
+      }
+
+      /* Featured Stories Section */
+      .featured-stories {
+        margin: 40px auto;
+        max-width: 1200px;
+      }
+
+      .featured-stories-featured-stories-header {
+        color: #000;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        text-transform: uppercase;
+      }
+
+      .featured-stories-stories-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .featured-stories-story-card {
+        background-color: #fff;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .featured-stories-story-image-container {
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+      }
+
+      .featured-stories-story-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .featured-stories-story-card:hover .featured-stories-story-image {
+        transform: scale(1.1);
+      }
+
+      .featured-stories-story-content {
+        padding: 15px;
+      }
+
+      .featured-stories-story-title {
+        color: #1b1b1b;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        transition: color 0.3s ease;
+      }
+
+      .featured-stories-story-card:hover .featured-stories-story-title {
+        color: #3557ff;
+      }
+
+      .featured-stories-story-description {
+        color: #4a4a4a;
+        font-size: 18px;
+        line-height: 1.5;
+      }
+
+      /* News Letter Section */
+      .newsletter-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #041364;
+            border-radius: 8px;
+            color: white;
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .newsletter-content {
+            max-width: 60%;
+        }
+
+        .newsletter-heading {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .newsletter-description {
+            font-size: 16px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .newsletter-options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        /* Hide the default checkbox */
+        .checkbox-container input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        /* Custom checkbox */
+        .custom-checkbox {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-radius: 3px;
+            background-color: transparent;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+
+        /* Checkmark */
+        .custom-checkbox:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Show checkmark when checked */
+        .checkbox-container input[type="checkbox"]:checked + .custom-checkbox {
+            background-color: #041364;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .custom-checkbox:after {
+            display: block;
+        }
+
+        .checkbox-label {
+            font-size: 16px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .email-input {
+            flex-grow: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 6px 0 0 6px;
+            font-size: 16px;
+        }
+
+        .subscribe-button {
+            padding: 15px 30px;
+            background-color: #bbbcbe;
+            color: #444;
+            border: none;
+            border-radius: 0 6px 6px 0;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .newsletter-terms {
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .newsletter-terms a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .see-all-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            border: 1px solid white;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .see-all-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .newsletter-image {
+            width: 35%;
+            max-width: 300px;
+        }
+
+      /* contribution section */
+
+      .contributors-section {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contributors-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .contributors-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00205b;
+            text-transform: uppercase;
+        }
+
+        .view-all-link {
+            color: #4169e1;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            border-bottom: 2px solid #4169e1;
+            padding-bottom: 3px;
+            transition: color 0.3s ease;
+        }
+
+        .view-all-link:hover {
+            color: #3557ff;
+        }
+
+        .contributors-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .contributor-card {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .contributor-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .image-container {
+            position: relative;
+            background-color: #f8f9ff;
+            overflow: hidden;
+        }
+
+        .contributor-category {
+            position: absolute;
+            background-color: #fff;
+            color: #3557ff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            top: 15px;
+            left: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            z-index: 2;
+        }
+
+        .contributor-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .contributor-card:hover .contributor-image {
+            transform: scale(1.1);
+        }
+
+        .contributor-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .contributor-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .contributor-card:hover .contributor-name {
+            color: #3557ff;
+        }
+
+        .contributor-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .contributor-article {
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .article-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .contributor-card:hover .article-title {
+            color: #3557ff;
+        }
+
+        .article-title .arrow {
+            color: #4169e1;
+            font-size: 14px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .contributor-card:hover .article-title .arrow {
+            color: #3557ff;
+        }
+
+      /* Tools Section */
+      .tools-section {
+        margin: 40px 0;
+      }
+
+      .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .tool-card {
+        text-align: center;
+      }
+
+      .tool-image {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 15px;
+      }
+
+      .tool-name {
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .tools-links {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .tools-link {
+        color: #0e3174;
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+
+      /* Trending Topics */
+      .trending-topics {
+        margin: 40px auto;
+        max-width: 1200px;
+      }
+
+      .topics-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .topic-link {
+        color: #0e3174;
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+
+      /* Health A-Z Section */
+      .webmd_health_az_container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px 0;
+      }
+
+      .webmd_health_az_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 0 20px;
+      }
+
+      .webmd_health_az_title {
+        color: #00205b;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .webmd_health_az_view_all {
+        color: #1f5be9;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .webmd_health_az_grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        background-color: #f0f4ff;
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .webmd_health_az_item {
+        display: flex;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #dbdbff;
+      }
+
+      .webmd_health_az_item_link {
+        color: #1f5be9;
+        text-decoration: none;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+      }
+
+      .webmd_health_az_arrow {
+        color: #1f5be9;
+        margin-right: 8px;
+        font-size: 14px;
+      }
+
+      /* Content Different Section */
+      .webmd_content_different_container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        display: flex;
+        align-items: center;
+        background-color: #fff7f4;
+      }
+
+      .webmd_content_different_image {
+        flex: 1;
+        max-width: 50%;
+      }
+
+      .webmd_content_different_image img {
+        width: 100%;
+        height: auto;
+      }
+
+      .webmd_content_different_content {
+        flex: 1;
+        padding: 0 40px;
+      }
+
+      .webmd_content_different_title {
+        font-size: 32px;
+        font-weight: bold;
+        color: #1d1d1d;
+        margin-bottom: 20px;
+      }
+
+      .webmd_content_different_intro {
+        color: #333;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+
+      .webmd_content_different_responsibility {
+        color: #333;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .webmd_content_different_point {
+        display: flex;
+        margin-bottom: 20px;
+      }
+
+      .webmd_content_different_number {
+        font-size: 28px;
+        font-weight: bold;
+        color: #7289da;
+        margin-right: 20px;
+      }
+
+      .webmd_content_different_point_content {
+        flex: 1;
+      }
+
+      .webmd_content_different_point_text {
+        color: #333;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .webmd_content_different_point_bold {
+        font-weight: bold;
+        color: #1d1d1d;
+      }
+
+      .webmd_content_different_learn_more {
+        color: #1f5be9;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        margin-top: 30px;
+      }
+
+      /* Newsletter Section */
+      .webmd_newsletter_container {
+        background-color: #060d2a;
+        color: white;
+        padding: 40px 0;
+      }
+
+      .webmd_newsletter_content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .webmd_newsletter_title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .webmd_newsletter_description {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .webmd_newsletter_columns {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .webmd_newsletter_form_column {
+        flex: 0 0 45%;
+      }
+
+      .webmd_newsletter_form {
+        display: flex;
+        margin-bottom: 15px;
+      }
+
+      .webmd_newsletter_input {
+        flex: 1;
+        padding: 12px 15px;
+        border: none;
+        border-radius: 4px 0 0 4px;
+        font-size: 16px;
+      }
+
+      .webmd_newsletter_button {
+        padding: 12px 25px;
+        background-color: #7289da;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .webmd_newsletter_terms {
+        font-size: 12px;
+        color: #ccc;
+        line-height: 1.5;
+      }
+
+      .webmd_newsletter_terms a {
+        color: white;
+        text-decoration: underline;
+      }
+
+      .webmd_newsletter_social_column {
+        flex: 0 0 25%;
+        padding-top: 10px;
+      }
+
+      .webmd_newsletter_social_title {
+        font-size: 16px;
+        margin-bottom: 15px;
+      }
+
+      .webmd_newsletter_social_icons {
+        display: flex;
+        gap: 15px;
+      }
+
+      .webmd_newsletter_social_icon {
+        width: 30px;
+        height: 30px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #060d2a;
+        text-decoration: none;
+        font-size: 16px;
+      }
+
+      .webmd_newsletter_app_column {
+        flex: 0 0 25%;
+        padding-top: 10px;
+      }
+
+      .webmd_newsletter_app_title {
+        font-size: 16px;
+        margin-bottom: 15px;
+      }
+
+      .webmd_newsletter_app_links {
+        display: flex;
+        gap: 10px;
+      }
+
+      .webmd_newsletter_app_link img {
+        height: 40px;
+        width: auto;
+      }
+
+      /* Footer Section */
+      .webmd_footer_container {
+        background-color: #060d2a;
+        color: white;
+        padding: 0 0 30px 0;
+      }
+
+      .webmd_footer_content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        border-top: 1px solid #1a2250;
+      }
+
+      .webmd_footer_nav {
+        display: flex;
+        padding: 20px 0;
+      }
+
+      .webmd_footer_nav_item {
+        margin-right: 20px;
+        color: white;
+        text-decoration: none;
+        background-color: #14204c;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+      }
+
+      .webmd_footer_nav_item.active {
+        background-color: #0b1638;
+      }
+
+      .webmd_footer_links {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 20px 0;
+      }
+
+      .webmd_footer_link {
+        color: white;
+        text-decoration: none;
+        margin-right: 20px;
+        position: relative;
+        font-size: 14px;
+        padding: 5px 0;
+      }
+
+      .webmd_footer_link:not(:last-child):after {
+        content: "|";
+        position: absolute;
+        right: -12px;
+        color: #1a2250;
+      }
+
+      .webmd_footer_copyright {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+        font-size: 12px;
+        color: #999;
+      }
+
+      .webmd_footer_copyright_text a {
+        color: white;
+        text-decoration: underline;
+      }
+
+      .webmd_footer_logo {
+        text-align: right;
+      }
+
+      .webmd_footer_logo img {
+        height: 30px;
+        width: auto;
+      }
+
+      .webmd_footer_certifications {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        gap: 15px;
+      }
+
+      .webmd_footer_certifications img {
+        height: 40px;
+        width: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- header seaction -->
+    <header>
+      <nav class="navbar">
+        <!-- Nav links -->
+        <ul class="nav-links">
+          <!-- Conditions -->
+          <li>
+            <!-- Logo -->
+            <a href="#" class="logo">
+              <img
+                src="https://img.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/logos/webmd/web/webmd_logo_white.svg"
+                alt="WebMD Logo"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="#" id="conditions-btn"
+              >Conditions
+              <span class="arrow"
+                ><svg class="arrow-icon" viewBox="0 0 24 24">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg> </span
+            ></a>
+            <div class="nav-dropdown-container" id="conditions-dropdown">
+              <div class="dropdown-inner">
+                <a href="#">ADD/ADHD</a>
+                <a href="#">Depression</a>
+                <a href="#">Lung Disease</a>
+                <a href="#">Psoriatic Arthritis</a>
+                <a href="#">Allergies</a>
+                <a href="#">Diabetes</a>
+                <a href="#">Lupus</a>
+                <a href="#">Rheumatoid Arthritis</a>
+                <a href="#">Arthritis</a>
+                <a href="#">DVT</a>
+                <a href="#">Mental Health</a>
+                <a href="#">Sexual Conditions</a>
+                <a href="#">Atrial fibrillation</a>
+                <a href="#">Eczema</a>
+                <a href="#">Multiple Sclerosis</a>
+                <a href="#">Skin Problems</a>
+                <a href="#">Breast Cancer</a>
+                <a href="#">Eye Health</a>
+                <a href="#">Migraine</a>
+                <a href="#">Sleep Disorders</a>
+                <a href="#">Cancer</a>
+                <a href="#">Heart Disease</a>
+                <a href="#">Pain Management</a>
+                <a href="#">Ulcerative Colitis</a>
+                <a href="#">Crohn's Disease</a>
+                <a href="#">HIV & AIDS</a>
+                <a href="#">Psoriasis</a>
+                <a href="#" class="view-all">→ View All</a>
+              </div>
+            </div>
+          </li>
+
+          <!-- Drugs & Supplements -->
+          <li>
+            <a href="#" id="drugs-btn"
+              >Drugs & Supplements
+              <span class="arrow"
+                ><svg class="arrow-icon" viewBox="0 0 24 24">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg> </span
+            ></a>
+            <div class="nav-dropdown-container" id="drugs-dropdown">
+              <div class="dropdown-inner">
+                <a href="#">Drugs</a>
+                <a href="#">Supplements</a>
+                <a href="#">Pill Identifier</a>
+                <a href="#">Interaction Checker</a>
+              </div>
+            </div>
+          </li>
+
+          <!-- Well‑Being -->
+          <li>
+            <a href="#" id="wellbeing-btn"
+              >Well‑Being
+              <span class="arrow"
+                ><svg class="arrow-icon" viewBox="0 0 24 24">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg> </span
+            ></a>
+            <div class="nav-dropdown-container" id="wellbeing-dropdown">
+              <div class="dropdown-inner">
+                <a href="#">Aging Well</a>
+                <a href="#">Healthy Beauty</a>
+                <a href="#">Baby</a>
+                <a href="#">Men's Health</a>
+                <a href="#">Birth Control</a>
+                <a href="#">Parenting</a>
+                <a href="#">Children's Health</a>
+                <a href="#">Pet Health</a>
+                <a href="#">Diet & Weight Management</a>
+                <a href="#">Pregnancy</a>
+                <a href="#">Fitness & Exercise</a>
+                <a href="#">Sex & Relationships</a>
+                <a href="#">Food & Recipes</a>
+                <a href="#">Teen Health</a>
+                <a href="#">Health & Balance</a>
+                <a href="#">Women's Health</a>
+              </div>
+            </div>
+          </li>
+
+          <!-- Symptom Checker & Find a Doctor (no dropdown) -->
+          <li><a href="#">Symptom Checker</a></li>
+          <li><a href="#">Find a Doctor</a></li>
+
+          <!-- More -->
+          <li>
+            <a href="#"
+              >More
+              <span class="arrow"
+                ><svg class="arrow-icon" viewBox="0 0 24 24">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg> </span
+            ></a>
+            <div class="nav-dropdown-container" id="more-dropdown">
+              <div class="dropdown-inner">
+                <a href="#">News</a>
+                <a href="#">Blogs</a>
+                <a href="#">Podcasts</a>
+                <a href="#">Webinars</a>
+                <a href="#">Newsletters</a>
+                <a href="#">WebMD Surveys</a>
+                <a href="#">WebMD Magazine</a>
+                <a href="#">Best Hospitals</a>
+                <a href="#">Support Groups</a>
+              </div>
+            </div>
+          </li>
+
+          <!-- Separator -->
+          <li class="separator">|</li>
+
+          <!-- Subscribe button with envelope icon -->
+          <li>
+            <button class="subscribe-btn" style="border: 2px solid white">
+              <svg
+                class="envelope-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                ></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              Subscribe
+            </button>
+          </li>
+
+          <!-- Log In -->
+          <li><a href="#" class="login-btn">Log In</a></li>
+
+          <!-- Search icon -->
+          <li>
+            <button id="open-search" class="search-icon" aria-label="Search">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+          </li>
+        </ul>
+
+        <!-- Search overlay -->
+        <div id="search-container">
+          <div class="search-bar">
+            <input type="text" placeholder="Ask WebMD" />
+            <button class="search-button">Search</button>
+          </div>
+          <button
+            id="close-search"
+            class="close-search"
+            aria-label="Close search"
+          >
+            ✕
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Top Stories Section -->
+      <section class="top-top-stories">
+        <div class="top-section-header">
+          <h2 class="top-section-title">TODAY'S TOP STORIES</h2>
+        </div>
+
+        <div class="top-featured-story">
+          <div class="top-featured-image">
+            <img
+              src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/health_tools/2024_ib_ai_slideshows/S1_GettyImages-1352919035_1800x1200.jpg"
+              alt="Woman with headache"
+            />
+          </div>
+          <div class="top-featured-content">
+            <h3 class="top-featured-title">
+              Types Of Headaches And Relief Options
+            </h3>
+            <p class="top-featured-description">
+              A headache can be unbearable, but treatments like medications,
+              home remedies, and lifestyle changes could provide relief. Learn
+              the best solutions for managing your headaches.
+            </p>
+          </div>
+        </div>
+
+        <div class="top-story-cards">
+          <div class="top-story-card">
+            <div class="top-story-card-image">
+              <img
+                src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/health_tools/signs_youre_eating_too_much_salt_slideshow/1800ss_getty_rf_checking_blood_pressure.jpg"
+                alt="Person with blood pressure monitor"
+              />
+            </div>
+            <div class="top-story-card-content">
+              <h3 class="top-story-card-title">
+                High Blood Pressure: Is Surgery the Answer?
+              </h3>
+            </div>
+          </div>
+
+          <div class="top-story-card">
+            <div class="top-story-card-image">
+              <img
+                src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/health_tools/parkinsons_disease_what_to_know_slideshow/1800ss_getty_rf_woman_holding_arm.jpg"
+                alt="Hand tremor"
+              />
+            </div>
+            <div class="top-story-card-content">
+              <h3 class="top-story-card-title">
+                How to Identify Symptoms of Parkinson's Disease
+              </h3>
+            </div>
+          </div>
+
+          <div class="top-story-card">
+            <div class="top-story-card-image">
+              <img
+                src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/health_tools/staying_healthy_with_bcell_therapy_slideshow/1800ss_getty_rf_woman_meditating.jpg"
+                alt="Person measuring weight"
+              />
+            </div>
+            <div class="top-story-card-content">
+              <h3 class="top-story-card-title">
+                Things You Can Do at Night to Lose Weight
+              </h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Living Healthy Section -->
+      <section class="living-healthy-living-healthy">
+        <div class="living-healthy-section-header">
+          <h2 class="living-healthy-section-title">LIVING HEALTHY</h2>
+          <a href="#" class="living-healthy-view-all">View All</a>
+        </div>
+
+        <div class="living-healthy-health-categories">
+          <div class="living-healthy-health-category">
+            <img
+              src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/home_page/living-healthy-mental-health.png"
+              alt="Mental Health"
+            />
+            <div class="living-healthy-category-title">Mental Health</div>
+          </div>
+
+          <div class="living-healthy-health-category">
+            <img
+              src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/home_page/living-healthy-diet-weight-management.png"
+              alt="Diet & Weight Management"
+            />
+            <div class="living-healthy-category-title">
+              Diet & Weight Management
+            </div>
+          </div>
+
+          <div class="living-healthy-health-category">
+            <img
+              src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/home_page/living-healthy-healthy-aging.png"
+              alt="Healthy Aging"
+            />
+            <div class="living-healthy-category-title">Healthy Aging</div>
+          </div>
+
+          <div class="living-healthy-health-category">
+            <img
+              src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/home_page/living-healthy-sex-relationships.png"
+              alt="Sex & Relationships"
+            />
+            <div class="living-healthy-category-title">Sex & Relationships</div>
+          </div>
+
+          <div class="living-healthy-health-category">
+            <img
+              src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/home_page/living-healthy-fitness-exercise.png"
+              alt="Fitness & Exercise"
+            />
+            <div class="living-healthy-category-title">Fitness & Exercise</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Conditions Section -->
+      <section class="living-healthy-conditions">
+        <div class="living-healthy-section-header">
+          <h2 class="living-healthy-section-title">CONDITIONS</h2>
+          <a href="#" class="living-healthy-view-all">View All</a>
+        </div>
+
+        <div class="living-healthy-condition-links">
+          <a href="#" class="living-healthy-condition-link">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
+            Women's Health
+          </a>
+
+          <a href="#" class="living-healthy-condition-link">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
+            Depression
+          </a>
+
+          <a href="#" class="living-healthy-condition-link">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
+            Heart Failure
+          </a>
+
+          <a href="#" class="living-healthy-condition-link">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
+            Breast Cancer
+          </a>
+
+          <a href="#" class="living-healthy-condition-link">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
+            Rheumatoid Arthritis
+          </a>
+
+          <a href="#" class="living-healthy-condition-link">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
+            Lung Disease (COPD)
+          </a>
+
+          <a
+            href="#"
+            class="living-healthy-condition-link living-healthy-cancer"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
+            Cancer
+          </a>
+
+          <a href="#" class="living-healthy-condition-link">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
+            Diabetes
+          </a>
+        </div>
+      </section>
+
+      <!-- Health News Section -->
+      <section>
+        <div class="health-news-container">
+          <!-- Health News Header -->
+          <div class="health-news-header">
+            <h2 class="health-news-title">HEALTH NEWS</h2>
+            <a href="#" class="health-news-view-all">View All</a>
+          </div>
+
+          <!-- Featured News Item -->
+          <div class="health-news-featured">
+            <div class="health-news-featured-image-container">
+              <img
+                src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/health_tools/bouncing_back_after_a_migraine_slideshow/1800ss_getty_rf_doctor_patient_consultation.jpg"
+                alt="Doctor consulting with patient"
+                class="health-news-featured-image"
+              />
+            </div>
+            <div class="health-news-featured-content">
+              <h3 class="health-news-featured-title">
+                Parkinson's Disease May Soon Outpace Dementia
+              </h3>
+              <p class="health-news-featured-description">
+                According to a study published last month, Parkinson's disease
+                cases are expected to rise by 30% in North America and double
+                worldwide by 2050.
+              </p>
+            </div>
+          </div>
+
+          <!-- News Cards -->
+          <div class="health-news-cards">
+            <div class="health-news-card">
+              <h4 class="health-news-card-title">
+                New 'Heart Patch' Could Help Solve the Transplant Shortage
+              </h4>
+            </div>
+
+            <div class="health-news-card">
+              <h4 class="health-news-card-title">
+                This Common Vaginal Issue Is Really an STD
+              </h4>
+            </div>
+
+            <div class="health-news-card">
+              <h4 class="health-news-card-title">
+                The Case for Hitting Pause on All Your Supplements
+              </h4>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Expert Section -->
+      <section class="expert-opinion-expert-section">
+        <div class="expert-opinion-expert-header">
+          <div class="expert-opinion-expert-avatar">
+            <img
+              src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/home_page/homepage-john-whyte-image.png"
+              alt="Dr. John Whyte"
+            />
+          </div>
+          <div class="expert-opinion-expert-info">
+            <h3>Expert Insights From</h3>
+            <h2>John Whyte, MD</h2>
+            <p>WebMD Chief Medical</p>
+            <p>Officer</p>
+          </div>
+        </div>
+
+        <div class="expert-opinion-horizontal-line"></div>
+
+        <div class="expert-opinion-content-container">
+          <div class="expert-opinion-main-video-container">
+            <div class="expert-opinion-main-video">
+              <img
+                src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/videos/2022/50364432_Expert_Nash_020425_thumbnail_1800x1200.jpg"
+                alt="Healthcare professional on phone"
+              />
+              <div class="expert-opinion-watch-btn">
+                <svg
+                  class="expert-opinion-play-svg"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M8 5v14l11-7z" fill="white" />
+                </svg>
+                <span class="expert-opinion-watch-text">Watch</span>
+              </div>
+            </div>
+            <h3 class="expert-opinion-main-video-title">
+              What's Behind The Shortage Of Primary Care Doctors?
+            </h3>
+          </div>
+
+          <div class="expert-opinion-vertical-divider"></div>
+
+          <div class="expert-opinion-video-list-container">
+            <div class="expert-opinion-video-list">
+              <div class="expert-opinion-video-item">
+                <div class="expert-opinion-video-item-thumbnail">
+                  <img
+                    src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/article_thumbnails/video/1800x1200-50636780-cancer-winn-vcu-video.jpg"
+                    alt="Healthcare professionals discussing"
+                  />
+                  <div class="expert-opinion-video-item-play">
+                    <svg
+                      class="expert-opinion-play-svg"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M8 5v14l11-7z" fill="white" />
+                    </svg>
+                    <span class="expert-opinion-watch-text">Watch</span>
+                  </div>
+                </div>
+                <div class="expert-opinion-video-item-content">
+                  <h4 class="expert-opinion-video-item-title">
+                    DNA And "ZNA" Are Driving Cancers In Black Americans
+                  </h4>
+                </div>
+              </div>
+
+              <div class="expert-opinion-video-item">
+                <div class="expert-opinion-video-item-thumbnail">
+                  <img
+                    src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/article_thumbnails/features/_2024/08_2024/49228824_Cancer_SunilVerma_thumbnail_1800x1200.jpg"
+                    alt="Cancer care discussion"
+                  />
+                  <div class="expert-opinion-video-item-play">
+                    <svg
+                      class="expert-opinion-play-svg"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M8 5v14l11-7z" fill="white" />
+                    </svg>
+                    <span class="expert-opinion-watch-text">Watch</span>
+                  </div>
+                </div>
+                <div class="expert-opinion-video-item-content">
+                  <h4 class="expert-opinion-video-item-title">
+                    Transforming Patient-Centric Cancer Care
+                  </h4>
+                </div>
+              </div>
+
+              <div class="expert-opinion-video-item">
+                <div class="expert-opinion-video-item-thumbnail">
+                  <img
+                    src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/article_thumbnails/features/JW49019426_jw-surgeon-general-teens-social-media_thumb_VIM.jpg"
+                    alt="Teen with smartphone"
+                  />
+                  <div class="expert-opinion-video-item-play">
+                    <svg
+                      class="expert-opinion-play-svg"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M8 5v14l11-7z" fill="white" />
+                    </svg>
+                    <span class="expert-opinion-watch-text">Watch</span>
+                  </div>
+                </div>
+                <div class="expert-opinion-video-item-content">
+                  <h4 class="expert-opinion-video-item-title">
+                    Surgeon General's Advisory On Teens And Social Media
+                  </h4>
+                </div>
+              </div>
+
+              <div class="expert-opinion-video-item">
+                <div class="expert-opinion-video-item-thumbnail">
+                  <img
+                    src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/article_thumbnails/video/48552375_expert_stanton_and_schuele_epilepsy_video/1800x1200_48552375_expert_stanton_and_schuele_epilepsy_video.jpg"
+                    alt="Medical discussion"
+                  />
+                  <div class="expert-opinion-video-item-play">
+                    <svg
+                      class="expert-opinion-play-svg"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M8 5v14l11-7z" fill="white" />
+                    </svg>
+                    <span class="expert-opinion-watch-text">Watch</span>
+                  </div>
+                </div>
+                <div class="expert-opinion-video-item-content">
+                  <h4 class="expert-opinion-video-item-title">
+                    Understanding Sudden Unexpected Death In Epilepsy
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Special Section -->
+      <section class="special-section">
+        <div class="special-section-container">
+          <h2 class="special-section-special-section-header">
+            SPECIAL SECTION
+          </h2>
+          <div class="special-section-stories-grid">
+            <!-- Story 1 -->
+            <div class="special-section-story-card">
+              <div class="special-section-story-image-container">
+                <img
+                  src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/article_thumbnails/other/man_wearing_cpap_sleeping_beside_wife_in_bed_other/1800x1200_man_wearing_cpap_sleeping_beside_wife_in_bed_other.jpg"
+                  alt="Obesity Management"
+                  class="special-section-story-image"
+                />
+              </div>
+              <div class="special-section-story-content">
+                <p class="special-section-category">
+                  Content on Weight Loss and Obesity
+                </p>
+                <h3 class="special-section-story-title">
+                  A New Way To Look At Obesity
+                </h3>
+                <p class="special-section-story-description">
+                  Uncover a fresh take on obesity management, from modest weight
+                  loss benefits to the latest treatments and tips for reaching
+                  your goals.
+                </p>
+              </div>
+            </div>
+
+            <!-- Story 2 -->
+            <div class="special-section-story-card">
+              <div class="special-section-story-image-container">
+                <img
+                  src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/health_tools/managing_challenges_of_mg_slideshow/1800ss_getty_rf_doctor_patient_consultation.jpg"
+                  alt="Sleep Apnea"
+                  class="special-section-story-image"
+                />
+              </div>
+              <div class="special-section-story-content">
+                <p class="special-section-category">Spotlight on Sleep Apnea</p>
+                <h3 class="special-section-story-title">
+                  Treating Your Sleep Apnea
+                </h3>
+                <p class="special-section-story-description">
+                  Sleep apnea could strain your health and wallet, but the right
+                  diagnosis and treatment can help. Learn the signs, explore
+                  your options, and sleep easier.
+                </p>
+              </div>
+            </div>
+
+            <!-- Story 3 -->
+            <div class="special-section-story-card">
+              <div class="special-section-story-image-container">
+                <img
+                  src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/article_thumbnails/reference_guide/weight-gain-while-treating-hiv-spanish-ref-guide/1800x1200-weight-gain-while-treating-hiv-spanish-ref-guide.jpg"
+                  alt="Asthma Care"
+                  class="special-section-story-image"
+                />
+              </div>
+              <div class="special-section-story-content">
+                <p class="special-section-category">Spotlight on Asthma</p>
+                <h3 class="special-section-story-title">
+                  Breaking Barriers In Asthma Care
+                </h3>
+                <p class="special-section-story-description">
+                  Asthma is more likely to affect certain racial and ethnic
+                  groups. Learn more about the reasons for these disparities and
+                  some potential solutions.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trending Topics Section -->
+      <section class="trending-topics">
+        <h2 class="trending-topics-header">TRENDING TOPICS</h2>
+        <div class="trending-topics-container">
+          <a href="#" class="trending-topics-item">Allergies</a>
+          <a href="#" class="trending-topics-item">Bird Flu</a>
+          <a href="#" class="trending-topics-item">Chronic Pain</a>
+          <a href="#" class="trending-topics-item">Cough</a>
+          <a href="#" class="trending-topics-item">Digestive Problems</a>
+          <a href="#" class="trending-topics-item">Emotional Wellness</a>
+          <a href="#" class="trending-topics-item">Fitness And Exercise</a>
+          <a href="#" class="trending-topics-item">Measles</a>
+          <a href="#" class="trending-topics-item"
+            >Skin Problems And Treatments</a
+          >
+          <a href="#" class="trending-topics-item">Vitamins And Supplements</a>
+        </div>
+      </section>
+
+       <!-- Featured Stories Section -->
+    <section class="featured-stories">
+        <div class="featured-stories-container">
+          <h2 class="featured-stories-featured-stories-header">
+              Featured Stories
+          </h2>
+          <div class="featured-stories-stories-grid">
+            <!-- Story 1 -->
+            <div class="featured-stories-story-card">
+              <div class="featured-stories-story-image-container">
+                <img
+                  src="https://img.lb.wbmdstatic.com/vim/live/consumer_assets/site_images/articles/health_tools/best_and_worst_foods_for_gout_slideshow/1800ss_getty_rf_holding_clementine_slice.jpg"
+                  alt="Obesity Management"
+                  class="featured-stories-story-image"
+                />
+              </div>
+              <div class="featured-stories-story-content">
+                <h3 class="featured-stories-story-title">
+                  How The Portfolio Diet Reduces Cholesterol Levels
+                </h3>
+                <p class="featured-stories-story-description">
+                  In this podcast, Dr. Huma Q. Rana breaks down genetic testing, its benefits, and what the results could mean for your health and your family.
+                </p>
+              </div>
+            </div>
+  
+            <!-- Story 2 -->
+            <div class="featured-stories-story-card">
+              <div class="featured-stories-story-image-container">
+                <img
+                  src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/article_thumbnails/other/doctor_inspecting_mature_womans_knee_other/1800x1200_doctor_inspecting_mature_womans_knee_other.jpg"
+                  alt="Sleep Apnea"
+                  class="featured-stories-story-image"
+                />
+              </div>
+              <div class="featured-stories-story-content">
+                <h3 class="featured-stories-story-title">
+                  How The Portfolio Diet Reduces Cholesterol Levels
+                </h3>
+                <p class="featured-stories-story-description">
+                  The Portfolio Diet focuses on lowering cholesterol, not weight loss. Discover the cholesterol-fighting foods to include in your diet.
+                </p>
+              </div>
+            </div>
+  
+            <!-- Story 3 -->
+            <div class="featured-stories-story-card">
+              <div class="featured-stories-story-image-container">
+                <img
+                  src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/health_tools/questions_to_ask_doctor_about_egfr_positive_nsclc_slideshow/1800ss_medical_images_rf_researcher_trialing_medical_drug_ampule.jpg"
+                  alt="Asthma Care"
+                  class="featured-stories-story-image"
+                />
+              </div>
+              <div class="featured-stories-story-content">
+                <h3 class="featured-stories-story-title">
+                  Why Cartilage Restoration Might Delay Your Knee Replacement
+                </h3>
+                <p class="featured-stories-story-description">
+                  Knee replacement relieves severe pain but doesn’t last forever. Cartilage restoration could be an option -- here's what to know.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- newsletter sections -->
+    <section class="newsletter-section">
+        <div class="newsletter-content">
+            <h2 class="newsletter-heading">Free WebMD Newsletters</h2>
+            <p class="newsletter-description">Doctor-approved health and wellness information delivered to your inbox.</p>
+            
+            <div class="newsletter-options">
+                <label class="checkbox-container">
+                    <input type="checkbox" name="newsletter" value="daily">
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-label">Daily Updates</span>
+                </label>
+                
+                <label class="checkbox-container">
+                    <input type="checkbox" name="newsletter" value="womens">
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-label">Women's Health</span>
+                </label>
+                
+                <label class="checkbox-container">
+                    <input type="checkbox" name="newsletter" value="good">
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-label">Good Health</span>
+                </label>
+            </div>
+            
+            <form class="newsletter-form">
+                <input type="email" class="email-input" placeholder="Enter your email address">
+                <button type="submit" class="subscribe-button">Subscribe</button>
+            </form>
+            
+            <div class="newsletter-terms">
+                By clicking Subscribe, I agree to the WebMD <a href="#">Terms & Conditions</a> and
+                <a href="#">Privacy Policy</a> and understand that I may opt out of WebMD subscriptions
+                at any time. This site is protected by reCAPTCHA and the Google <a href="#">Privacy
+                Policy</a> and <a href="#">Terms of Service</a> apply.
+            </div>
+            
+            <a href="#" class="see-all-button">See All WebMD Newsletters</a>
+        </div>
+        
+        <div class="newsletter-image">
+            <img src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/home_page/hp-nl-envelop.png" alt="Newsletter Illustration" style="width: 100%;">
+        </div>
+    </section>
+
+    <!-- contribution section -->
+    <section class="contributors-section">
+        <div class="contributors-header">
+            <h2 class="contributors-title">PATIENT AND EXPERT CONTRIBUTORS</h2>
+            <a href="#" class="view-all-link">View All</a>
+        </div>
+        
+        <div class="contributors-grid">
+            <!-- Contributor 1 -->
+            <div class="contributor-card">
+                <div class="image-container">
+                    <div class="contributor-category">Myasthenia Gravis</div>
+                    <img src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/biographies/600x600_misha_page.jpg" alt="Misha Grayson Coleman" class="contributor-image">
+                </div>
+                <div class="contributor-info">
+                    <h3 class="contributor-name">Misha Grayson Coleman</h3>
+                    <p class="contributor-title">Diagnosed since 2021</p>
+                </div>
+                <div class="contributor-article">
+                    <div class="article-title">
+                        <span>How Hormonal Changes Affect MG</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contributor 2 -->
+            <div class="contributor-card">
+                <div class="image-container">
+                    <div class="contributor-category">Breast Cancer</div>
+                    <img src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/biographies/600x600_brianna_osofisan.jpg" alt="Brianna Osofisan" class="contributor-image">
+                </div>
+                <div class="contributor-info">
+                    <h3 class="contributor-name">Brianna Osofisan</h3>
+                    <p class="contributor-title">Diagnosed since 2019</p>
+                </div>
+                <div class="contributor-article">
+                    <div class="article-title">
+                        <span>Project 528, Part 3: The Scars You Don't See</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contributor 3 -->
+            <div class="contributor-card">
+                <div class="image-container">
+                    <div class="contributor-category">Digestive Health</div>
+                    <img src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/biographies/600x600_sally_kuzemchak.jpg" alt="Sally Kuzemchak" class="contributor-image">
+                </div>
+                <div class="contributor-info">
+                    <h3 class="contributor-name">Sally Kuzemchak, RD, MS</h3>
+                    <p class="contributor-title">Registered dietitian</p>
+                </div>
+                <div class="contributor-article">
+                    <div class="article-title">
+                        <span>The Diagnosis Is Celiac Disease: Now What?</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contributor 4 -->
+            <div class="contributor-card">
+                <div class="image-container">
+                    <div class="contributor-category">Skin Care</div>
+                    <img src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/biographies/600x600_mary_alice_mina.jpg" alt="Mary Alice Mina" class="contributor-image">
+                </div>
+                <div class="contributor-info">
+                    <h3 class="contributor-name">Mary Alice Mina, MD</h3>
+                    <p class="contributor-title">Double board-certified dermatologist</p>
+                </div>
+                <div class="contributor-article">
+                    <div class="article-title">
+                        <span>The Truth About PRP: Myths, Facts, and What You Need to Know</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+      <!-- Tools Section -->
+      <section class="tools-section">
+        <div class="container">
+          <h2 class="section-header">TOOLS, TRACKERS & CALCULATORS</h2>
+          <div class="tools-grid">
+            <!-- Tool 1 -->
+            <div class="tool-card">
+              <img
+                src="/api/placeholder/100/100"
+                alt="BMI Calculator"
+                class="tool-image"
+              />
+              <p class="tool-name">BMI Calculator</p>
+            </div>
+
+            <!-- Tool 2 -->
+            <div class="tool-card">
+              <img
+                src="/api/placeholder/100/100"
+                alt="Ovulation Calculator"
+                class="tool-image"
+              />
+              <p class="tool-name">Ovulation Calculator</p>
+            </div>
+
+            <!-- Tool 3 -->
+            <div class="tool-card">
+              <img
+                src="/api/placeholder/100/100"
+                alt="Cold And Flu Map"
+                class="tool-image"
+              />
+              <p class="tool-name">Cold And Flu Map</p>
+            </div>
+
+            <!-- Tool 4 -->
+            <div class="tool-card">
+              <img
+                src="/api/placeholder/100/100"
+                alt="Pill Identifier"
+                class="tool-image"
+              />
+              <p class="tool-name">Pill Identifier</p>
+            </div>
+
+            <!-- Tool 5 -->
+            <div class="tool-card">
+              <img
+                src="/api/placeholder/100/100"
+                alt="Drugs Interaction Checker"
+                class="tool-image"
+              />
+              <p class="tool-name">Drugs Interaction Checker</p>
+            </div>
+          </div>
+          <div class="tools-links">
+            <a href="#" class="tools-link">Cat Health Tool</a>
+            <a href="#" class="tools-link">Dog Health Tool</a>
+            <a href="#" class="tools-link">Due Date Calculator</a>
+            <a href="#" class="tools-link">Fitness Calorie Counter</a>
+            <a href="#" class="tools-link">Kids BMI</a>
+            <a href="#" class="tools-link">Visual Pregnancy Timeline</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Health A-Z Section -->
+      <section class="webmd_health_az_container">
+        <div class="webmd_health_az_header">
+          <h2 class="webmd_health_az_title">HEALTH A - Z</h2>
+          <a href="#" class="webmd_health_az_view_all">View All</a>
+        </div>
+        <div class="webmd_health_az_grid">
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              ADD/ADHD - Childhood
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              ADHD
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Allergies
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Alzheimer's
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Ankylosing Spondylitis
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Anxiety Disorders
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Arthritis
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Asthma
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Back Pain
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Cancer
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Children's Vaccines
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Cholesterol
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Cold, Flu, & Cough
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              COPD
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Coronavirus
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Depression
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Diabetes
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Digestive Disorders
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Eye Health
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Health & Balance
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Heart Health
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Heartburn/GERD
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Hypertension
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Lung Cancer
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Mental Health
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Migraines
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Multiple Myeloma
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Multiple Sclerosis
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Oral Care
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Orthopedics
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Osteoporosis
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Ovarian Cancer
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Prostate Cancer
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Psoriasis
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Rheumatoid Arthritis
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Schizophrenia
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Sexual Conditions
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Skin Problems
+            </a>
+          </div>
+          <div class="webmd_health_az_item">
+            <a href="#" class="webmd_health_az_item_link">
+              <span class="webmd_health_az_arrow">→</span>
+              Sleep Disorders
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Content Different Section -->
+      <section class="webmd_content_different_container">
+        <div class="webmd_content_different_image">
+          <img
+            src="/api/placeholder/600/500"
+            alt="Medical professionals working"
+          />
+        </div>
+        <div class="webmd_content_different_content">
+          <h2 class="webmd_content_different_title">
+            Our Content Is Different Because We Set the Bar Higher
+          </h2>
+          <p class="webmd_content_different_intro">
+            As a leader in digital health publishing for more than 25 years,
+            WebMD strives to maintain the most comprehensive and reliable source
+            of health and medical information on the internet.
+          </p>
+          <p class="webmd_content_different_responsibility">
+            We recognize the responsibility that comes along with being the most
+            well-known and trusted health information platform — and we take
+            that responsibility seriously by:
+          </p>
+          <div class="webmd_content_different_point">
+            <div class="webmd_content_different_number">01</div>
+            <div class="webmd_content_different_point_content">
+              <p class="webmd_content_different_point_text">
+                Charging our content creators to practice
+                <span class="webmd_content_different_point_bold"
+                  >journalistic principles</span
+                >
+                of excellence and provide objective, accurate, and balanced
+                reporting
+              </p>
+            </div>
+          </div>
+          <div class="webmd_content_different_point">
+            <div class="webmd_content_different_number">02</div>
+            <div class="webmd_content_different_point_content">
+              <p class="webmd_content_different_point_text">
+                Maintaining
+                <span class="webmd_content_different_point_bold"
+                  >editorial independence</span
+                >
+                and transparency into how we protect the integrity of our
+                content
+              </p>
+            </div>
+          </div>
+          <div class="webmd_content_different_point">
+            <div class="webmd_content_different_number">03</div>
+            <div class="webmd_content_different_point_content">
+              <p class="webmd_content_different_point_text">
+                Regularly reviewing and updating our content by working with our
+                network of
+                <span class="webmd_content_different_point_bold"
+                  >more than 100 doctors and health experts</span
+                >
+              </p>
+            </div>
+          </div>
+          <a href="#" class="webmd_content_different_learn_more">
+            <span class="webmd_health_az_arrow">→</span>
+            Learn more about our Editorial Process
+          </a>
+        </div>
+      </section>
+
+      <!-- Newsletter Section -->
+      <section class="webmd_newsletter_container">
+        <div class="webmd_newsletter_content">
+          <h2 class="webmd_newsletter_title">
+            Sign up for our free Good Health Newsletter
+          </h2>
+          <p class="webmd_newsletter_description">
+            Get wellness tips to help you live happier and healthier
+          </p>
+
+          <div class="webmd_newsletter_columns">
+            <div class="webmd_newsletter_form_column">
+              <form class="webmd_newsletter_form">
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  class="webmd_newsletter_input"
+                />
+                <button type="submit" class="webmd_newsletter_button">
+                  Subscribe
+                </button>
+              </form>
+              <p class="webmd_newsletter_terms">
+                By clicking Subscribe, I agree to the WebMD
+                <a href="#">Terms & Conditions & Privacy Policy</a> and
+                understand that I may opt out of WebMD subscriptions at any
+                time. This site is protected by reCAPTCHA and the Google
+                <a href="#">Privacy Policy</a> and
+                <a href="#">Terms of Service</a> apply.
+              </p>
+            </div>
+
+            <div class="webmd_newsletter_social_column">
+              <h3 class="webmd_newsletter_social_title">
+                Follow WebMD on Social Media
+              </h3>
+              <div class="webmd_newsletter_social_icons">
+                <a href="#" class="webmd_newsletter_social_icon">f</a>
+                <a href="#" class="webmd_newsletter_social_icon">t</a>
+                <a href="#" class="webmd_newsletter_social_icon">i</a>
+                <a href="#" class="webmd_newsletter_social_icon">T</a>
+                <a href="#" class="webmd_newsletter_social_icon">p</a>
+                <a href="#" class="webmd_newsletter_social_icon">w</a>
+              </div>
+            </div>
+
+            <div class="webmd_newsletter_app_column">
+              <h3 class="webmd_newsletter_app_title">Download WebMD App</h3>
+              <div class="webmd_newsletter_app_links">
+                <a href="#" class="webmd_newsletter_app_link">
+                  <img src="/api/placeholder/120/40" alt="App Store" />
+                </a>
+                <a href="#" class="webmd_newsletter_app_link">
+                  <img src="/api/placeholder/120/40" alt="Google Play" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer Section -->
+      <footer class="webmd_footer_container">
+        <div class="webmd_footer_content">
+          <nav class="webmd_footer_nav">
+            <a href="#" class="webmd_footer_nav_item active">Policies</a>
+            <a href="#" class="webmd_footer_nav_item">About</a>
+            <a href="#" class="webmd_footer_nav_item">For Advertisers</a>
+          </nav>
+
+          <div class="webmd_footer_links">
+            <a href="#" class="webmd_footer_link">Privacy Policy</a>
+            <a href="#" class="webmd_footer_link">Cookie Policy</a>
+            <a href="#" class="webmd_footer_link">Editorial Policy</a>
+            <a href="#" class="webmd_footer_link">Advertising Policy</a>
+            <a href="#" class="webmd_footer_link">Correction Policy</a>
+            <a href="#" class="webmd_footer_link">Terms of Use</a>
+          </div>
+
+          <div class="webmd_footer_copyright">
+            <div class="webmd_footer_copyright_text">
+              © 2005 - 2025 WebMD LLC, an
+              <a href="#">Internet Brands</a> company. All rights reserved.
+              WebMD does not provide medical advice, diagnosis or treatment. See
+              <a href="#">additional information</a>.
+            </div>
+            <div>
+              <div class="webmd_footer_logo">
+                <img src="/api/placeholder/120/30" alt="WebMD Logo" />
+              </div>
+              <div class="webmd_footer_certifications">
+                <img src="/api/placeholder/40/40" alt="Certification 1" />
+                <img src="/api/placeholder/40/40" alt="Certification 2" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      // JavaScript for navbar hover effect
+      document.getElementById("open-search").addEventListener("click", () => {
+        document.getElementById("search-container").classList.add("active");
+      });
+      document.getElementById("close-search").addEventListener("click", () => {
+        document.getElementById("search-container").classList.remove("active");
+      });
+    </script>
+  </body>
+</html>

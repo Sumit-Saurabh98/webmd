@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient and Expert Contributors</title>
+    <style>
+        @import url("https://use.typekit.net/laj2ylz.css");
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Source Sans Pro", Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+            color: #333;
+            padding: 20px;
+        }
+
+        /* contribution section */
+
+        .contributors-section {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contributors-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .contributors-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00205b;
+            text-transform: uppercase;
+        }
+
+        .view-all-link {
+            color: #4169e1;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            border-bottom: 2px solid #4169e1;
+            padding-bottom: 3px;
+            transition: color 0.3s ease;
+        }
+
+        .view-all-link:hover {
+            color: #3557ff;
+        }
+
+        .contributors-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .contributor-card {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .contributor-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .image-container {
+            position: relative;
+            background-color: #f8f9ff;
+            overflow: hidden;
+        }
+
+        .contributor-category {
+            position: absolute;
+            background-color: #fff;
+            color: #3557ff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            top: 15px;
+            left: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            z-index: 2;
+        }
+
+        .contributor-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .contributor-card:hover .contributor-image {
+            transform: scale(1.1);
+        }
+
+        .contributor-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .contributor-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .contributor-card:hover .contributor-name {
+            color: #3557ff;
+        }
+
+        .contributor-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .contributor-article {
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .article-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .contributor-card:hover .article-title {
+            color: #3557ff;
+        }
+
+        .article-title .arrow {
+            color: #4169e1;
+            font-size: 14px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .contributor-card:hover .article-title .arrow {
+            color: #3557ff;
+        }
+    </style>
+</head>
+<body>
+
+    /* contribution section */
+    <section class="contributors-section">
+        <div class="contributors-header">
+            <h2 class="contributors-title">PATIENT AND EXPERT CONTRIBUTORS</h2>
+            <a href="#" class="view-all-link">View All</a>
+        </div>
+        
+        <div class="contributors-grid">
+            <!-- Contributor 1 -->
+            <div class="contributor-card">
+                <div class="image-container">
+                    <div class="contributor-category">Myasthenia Gravis</div>
+                    <img src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/biographies/600x600_misha_page.jpg" alt="Misha Grayson Coleman" class="contributor-image">
+                </div>
+                <div class="contributor-info">
+                    <h3 class="contributor-name">Misha Grayson Coleman</h3>
+                    <p class="contributor-title">Diagnosed since 2021</p>
+                </div>
+                <div class="contributor-article">
+                    <div class="article-title">
+                        <span>How Hormonal Changes Affect MG</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contributor 2 -->
+            <div class="contributor-card">
+                <div class="image-container">
+                    <div class="contributor-category">Breast Cancer</div>
+                    <img src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/biographies/600x600_brianna_osofisan.jpg" alt="Brianna Osofisan" class="contributor-image">
+                </div>
+                <div class="contributor-info">
+                    <h3 class="contributor-name">Brianna Osofisan</h3>
+                    <p class="contributor-title">Diagnosed since 2019</p>
+                </div>
+                <div class="contributor-article">
+                    <div class="article-title">
+                        <span>Project 528, Part 3: The Scars You Don't See</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contributor 3 -->
+            <div class="contributor-card">
+                <div class="image-container">
+                    <div class="contributor-category">Digestive Health</div>
+                    <img src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/biographies/600x600_sally_kuzemchak.jpg" alt="Sally Kuzemchak" class="contributor-image">
+                </div>
+                <div class="contributor-info">
+                    <h3 class="contributor-name">Sally Kuzemchak, RD, MS</h3>
+                    <p class="contributor-title">Registered dietitian</p>
+                </div>
+                <div class="contributor-article">
+                    <div class="article-title">
+                        <span>The Diagnosis Is Celiac Disease: Now What?</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contributor 4 -->
+            <div class="contributor-card">
+                <div class="image-container">
+                    <div class="contributor-category">Skin Care</div>
+                    <img src="https://img.lb.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/articles/biographies/600x600_mary_alice_mina.jpg" alt="Mary Alice Mina" class="contributor-image">
+                </div>
+                <div class="contributor-info">
+                    <h3 class="contributor-name">Mary Alice Mina, MD</h3>
+                    <p class="contributor-title">Double board-certified dermatologist</p>
+                </div>
+                <div class="contributor-article">
+                    <div class="article-title">
+                        <span>The Truth About PRP: Myths, Facts, and What You Need to Know</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
