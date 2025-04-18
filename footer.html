@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebMD Footer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    /* footer section */
+    
+    .footer-main-footer-section {
+      background-color: #0a0f24;
+      color: #fff;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    
+    .footer-footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    
+    .footer-newsletter-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .footer-newsletter-left {
+      flex: 1;
+      min-width: 300px;
+      margin-right: 2rem;
+    }
+    
+    .footer-newsletter-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+    
+    .footer-newsletter-section p {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: #f9f9f9;
+    }
+    
+    .footer-subscribe-form {
+      display: flex;
+      margin-bottom: 1rem;
+      max-width: 680px;
+    }
+    
+    .footer-subscribe-form input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      font-size: 1rem;
+    }
+    
+    .footer-subscribe-form button {
+      padding: 0.75rem 1.5rem;
+      background-color: #d0d0d0;
+      border: none;
+      color: #333;
+      cursor: pointer;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    .footer-legal-text {
+      font-size: 0.75rem;
+      color: #d0d0d0;
+      margin-bottom: 1.5rem;
+      max-width: 680px;
+      line-height: 1.4;
+    }
+    
+    .footer-legal-text a {
+      color: #fff;
+      text-decoration: none;
+    }
+    
+    .footer-legal-text a:hover {
+      text-decoration: underline;
+    }
+    
+    .footer-newsletter-right {
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .footer-sections-container {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .section {
+      min-width: 200px;
+    }
+    
+    .section-divider {
+      width: 1px;
+      background-color: #2a2a3c;
+      margin: 0 1rem;
+      min-height: 150px;
+    }
+    
+    .social-media h3, .app-download h3 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-weight: normal;
+    }
+    
+    .footer-social-media-icons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .social-media-icon {
+      width: 32px;
+      height: 32px;
+      background-color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+    }
+    
+    .social-media-icon:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .app-stores {
+      display: flex;
+      gap: 0.75rem;
+    }
+    
+    .app-store-btn {
+      height: 40px;
+    }
+    
+    .footer-main {
+      border-top: 1px solid #2a2a3c;
+      padding-top: 1.5rem;
+    }
+    
+    .footer-nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-nav-item {
+      position: relative;
+    }
+    
+    .nav-button {
+      background: none;
+      border: none;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .nav-button.active {
+      background-color: #3b3b57;
+    }
+    
+    .horizontal-menu-container {
+      position: relative;
+      border-top: 1px solid #2a2a3c;
+      padding-top: 1rem;
+      margin-top: 1rem;
+      min-height: 30px;
+    }
+    
+    .menu-and-ad-choices {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .horizontal-menu {
+      display: none;
+      background: none;
+      white-space: nowrap;
+    }
+    
+    .horizontal-menu.active {
+      display: flex;
+    }
+    
+    .footer-nav-item:hover .nav-button:not(.active) {
+      background-color: rgba(59, 59, 87, 0.5);
+    }
+    
+    .horizontal-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0 0.5rem;
+    }
+    
+    .horizontal-menu a:hover {
+      text-decoration: underline;
+    }
+    
+    .horizontal-menu .separator {
+      color: #fff;
+    }
+    
+    .footer-footer-container-bottom {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .ad-choices-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .ad-choices {
+      height: 32px;
+    }
+    
+    .tag-icon {
+      height: 24px;
+    }
+    
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #2a2a3c;
+    }
+    
+    .copyright {
+      font-size: 0.75rem;
+      color: #d0d0d0;
+      flex: 1;
+    }
+    
+    .copyright a {
+      color: #fff;
+      text-decoration: none;
+    }
+    
+    .copyright a:hover {
+      text-decoration: underline;
+    }
+    
+    .logo-container {
+      text-align: right;
+    }
+    
+    .webmd-logo {
+      max-width: 150px;
+    }
+  </style>
+</head>
+<body>
+    <section class="footer-main-footer-section">
+        <div class="footer-footer-container">
+            <!-- Newsletter Section -->
+            <div class="footer-newsletter-section">
+              <div class="footer-newsletter-left">
+                <h2>Sign up for our free Good Health Newsletter</h2>
+                <p>Get wellness tips to help you live happier and healthier</p>
+                
+                <form class="footer-subscribe-form">
+                  <input type="email" placeholder="Enter your email address">
+                  <button type="submit">Subscribe</button>
+                </form>
+                
+                <p class="footer-legal-text">
+                  By clicking Subscribe, I agree to the WebMD <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a> and understand that I may opt out of WebMD subscriptions at any time. This site is protected by reCAPTCHA and the Google <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a> apply.
+                </p>
+              </div>
+              
+              <div class="footer-newsletter-right">
+                <div class="footer-sections-container">
+                  <div class="section social-media">
+                    <h3>Follow WebMD on Social Media</h3>
+                    <div class="footer-social-media-icons">
+                      <a href="#" class="social-media-icon">
+                        <!-- Facebook icon -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#0a0f24">
+                          <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3V2z"/>
+                        </svg>
+                      </a>
+                      <a href="#" class="social-media-icon">
+                        <!-- Twitter/X icon -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#0a0f24">
+                          <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                        </svg>
+                      </a>
+                      <a href="#" class="social-media-icon">
+                        <!-- Instagram icon -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#0a0f24">
+                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                          <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" fill="#fff"/>
+                          <circle cx="17.5" cy="6.5" r="1.5" fill="#fff"/>
+                        </svg>
+                      </a>
+                      <a href="#" class="social-media-icon">
+                        <!-- TikTok icon -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#0a0f24">
+                          <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+                        </svg>
+                      </a>
+                      <a href="#" class="social-media-icon">
+                        <!-- Pinterest icon -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#0a0f24">
+                          <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
+                        </svg>
+                      </a>
+                      <a href="#" class="social-media-icon">
+                        <!-- WhatsApp icon -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#0a0f24">
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div class="section-divider"></div>
+                  
+                  <div class="section app-download">
+                    <h3>Download WebMD App</h3>
+                    <div class="app-stores">
+                      <a href="#">
+                        <img src="https://img.webmd.com/vim/live/webmd/consumer_assets/site_images/tocs/community/thumbnails/ios-dwnld.png" alt="App Store" class="app-store-btn" />
+                      </a>
+                      <a href="#">
+                        <img src="https://img.webmd.com/vim/live/webmd/consumer_assets/site_images/tocs/community/thumbnails/android-dwnld.png" alt="Google Play" class="app-store-btn" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Footer Main Navigation -->
+            <div class="footer-main">
+              <div class="footer-nav">
+                <div class="footer-nav-item">
+                  <button class="nav-button active" data-tab="policies">Policies</button>
+                </div>
+                
+                <div class="footer-nav-item">
+                  <button class="nav-button" data-tab="about">About</button>
+                </div>
+                
+                <div class="footer-nav-item">
+                  <button class="nav-button" data-tab="advertisers">For Advertisers</button>
+                </div>
+              </div>
+              
+              <div class="menu-and-ad-choices">
+                <div class="horizontal-menu-container">
+                  <div class="horizontal-menu active" id="policies-menu">
+                    <a href="#">Privacy Policy</a>
+                    <span class="separator">|</span>
+                    <a href="#">Cookie Policy</a>
+                    <span class="separator">|</span>
+                    <a href="#">Editorial Policy</a>
+                    <span class="separator">|</span>
+                    <a href="#">Advertising Policy</a>
+                    <span class="separator">|</span>
+                    <a href="#">Correction Policy</a>
+                    <span class="separator">|</span>
+                    <a href="#">Terms of Use</a>
+                  </div>
+                  
+                  <div class="horizontal-menu" id="about-menu">
+                    <a href="#">Contact Us</a>
+                    <span class="separator">|</span>
+                    <a href="#">Careers</a>
+                    <span class="separator">|</span>
+                    <a href="#">Newsletter</a>
+                    <span class="separator">|</span>
+                    <a href="#">WebMD App</a>
+                    <span class="separator">|</span>
+                    <a href="#">Corporate</a>
+                    <span class="separator">|</span>
+                    <a href="#">Site Map</a>
+                  </div>
+                  
+                  <div class="horizontal-menu" id="advertisers-menu">
+                    <a href="#">Advertise with Us</a>
+                  </div>
+                </div>
+                
+                <div class="ad-choices-container">
+                  <img src="https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/layout/shared/tag-registered.png" alt="Tag" class="tag-icon" />
+                  <img src="https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/oncology/1/footer-images/ad-choice.png" alt="Ad Choices" class="ad-choices" />
+                </div>
+              </div>
+            </div>
+            
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+              <div class="copyright">
+                © 2005 - 2025 WebMD LLC, an <a href="#">Internet Brands</a> company. All rights reserved. WebMD does not provide medical advice, diagnosis or treatment. <a href="#">See additional information.</a>
+              </div>
+              
+              <div class="logo-container">
+              </div>
+              <img src="https://img.wbmdstatic.com/vim/live/webmd/consumer_assets/site_images/logos/webmd/web/webmd_logo_white.svg" alt="WebMD Logo" class="webmd-logo" />
+            </div>
+          </div>
+    </section>
+
+  <script>
+    // JavaScript for tab functionality
+    const navButtons = document.querySelectorAll('.nav-button');
+    const menus = document.querySelectorAll('.horizontal-menu');
+    
+    // Set up click event listeners
+    navButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        navButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Hide all menus
+        menus.forEach(menu => menu.classList.remove('active'));
+        // Show the correct menu
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(tabId + '-menu').classList.add('active');
+      });
+    });
+    
+    // Set up hover event listeners
+    navButtons.forEach(button => {
+      button.addEventListener('mouseenter', function() {
+        if (!this.classList.contains('active')) {
+          // Hide all menus
+          menus.forEach(menu => menu.classList.remove('active'));
+          // Show the correct menu
+          const tabId = this.getAttribute('data-tab');
+          document.getElementById(tabId + '-menu').classList.add('active');
+        }
+      });
+      
+      button.addEventListener('mouseleave', function() {
+        if (!this.classList.contains('active')) {
+          // Hide all menus except the active one
+          menus.forEach(menu => menu.classList.remove('active'));
+          // Find the active button and show its menu
+          const activeButton = document.querySelector('.nav-button.active');
+          if (activeButton) {
+            const activeTabId = activeButton.getAttribute('data-tab');
+            document.getElementById(activeTabId + '-menu').classList.add('active');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
